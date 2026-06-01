@@ -71,10 +71,13 @@ Click **Deploy** once (it may fail without env vars — that is OK).
 
 Add **all** of these for **Production**, **Preview**, and **Development**:
 
+> **Critical:** `VITE_*` variables are baked into the frontend at **build time**.  
+> If the app shows “Configuration required” or `supabaseUrl is required`, you added env vars **after** the last build — **Redeploy** with cache cleared.
+
 | Name | Value | Notes |
 |------|--------|--------|
-| `VITE_SUPABASE_URL` | `https://ogxuuoxicvszwpatxoap.supabase.co` | Client |
-| `VITE_SUPABASE_ANON_KEY` | your anon key | Client |
+| `VITE_SUPABASE_URL` | `https://ogxuuoxicvszwpatxoap.supabase.co` | **Required for UI** — must start with `VITE_` |
+| `VITE_SUPABASE_ANON_KEY` | your anon key | **Required for UI** — not service_role |
 | `SUPABASE_URL` | same as above | API routes |
 | `SUPABASE_SERVICE_ROLE_KEY` | service_role key | **Secret** — never expose |
 | `GEMINI_API_KEY` | `AIza...` | Platform AI quota |

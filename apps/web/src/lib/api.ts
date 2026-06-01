@@ -1,7 +1,7 @@
-import { supabase } from "./supabase";
+import { getSupabase } from "./supabase";
 
 async function getToken(): Promise<string> {
-  const { data } = await supabase.auth.getSession();
+  const { data } = await getSupabase().auth.getSession();
   const token = data.session?.access_token;
   if (!token) throw new Error("Not signed in");
   return token;

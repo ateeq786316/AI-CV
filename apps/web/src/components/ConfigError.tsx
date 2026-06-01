@@ -1,40 +1,38 @@
-export function ConfigError() {
+export function ConfigError({ message }: { message?: string }) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-100 p-6">
       <div className="max-w-lg rounded-xl bg-white p-8 shadow-lg ring-1 ring-slate-200">
         <h1 className="text-xl font-bold text-slate-900">Configuration required</h1>
+        {message && (
+          <p className="mt-2 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
+            {message}
+          </p>
+        )}
         <p className="mt-3 text-sm text-slate-600">
-          Supabase environment variables were not included in this build. Vite
-          only reads variables that start with{" "}
-          <code className="rounded bg-slate-100 px-1">VITE_</code> at{" "}
-          <strong>build time</strong>.
+          Add these in <strong>Vercel → Settings → Environment Variables</strong>{" "}
+          (all environments), then <strong>Redeploy</strong> without cache:
         </p>
-        <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm text-slate-700">
+        <ul className="mt-4 space-y-2 font-mono text-xs text-slate-800">
           <li>
-            Vercel → <strong>Project → Settings → Environment Variables</strong>
+            <strong>SUPABASE_URL</strong> = https://ogxuuoxicvszwpatxoap.supabase.co
           </li>
           <li>
-            Add <code className="rounded bg-slate-100 px-1">VITE_SUPABASE_URL</code>{" "}
-            = <code className="text-xs">https://ogxuuoxicvszwpatxoap.supabase.co</code>
+            <strong>SUPABASE_ANON_KEY</strong> = anon public key (Supabase → API)
           </li>
           <li>
-            Add <code className="rounded bg-slate-100 px-1">VITE_SUPABASE_ANON_KEY</code>{" "}
-            = your Supabase <strong>anon public</strong> key
+            <strong>SUPABASE_SERVICE_ROLE_KEY</strong> = service_role (secret)
           </li>
           <li>
-            Also add server vars: <code className="rounded bg-slate-100 px-1">SUPABASE_URL</code>,{" "}
-            <code className="rounded bg-slate-100 px-1">SUPABASE_SERVICE_ROLE_KEY</code>,{" "}
-            <code className="rounded bg-slate-100 px-1">GEMINI_API_KEY</code>,{" "}
-            <code className="rounded bg-slate-100 px-1">ENCRYPTION_SECRET</code>
+            <strong>GEMINI_API_KEY</strong> = your Gemini key
           </li>
           <li>
-            <strong>Redeploy</strong> (Deployments → ⋯ → Redeploy, clear cache)
+            <strong>ENCRYPTION_SECRET</strong> = random 32+ chars
           </li>
-        </ol>
+        </ul>
         <p className="mt-4 text-xs text-slate-500">
-          Local dev: copy <code className="rounded bg-slate-100 px-1">.env.example</code> to{" "}
-          <code className="rounded bg-slate-100 px-1">.env.local</code> in{" "}
-          <code className="rounded bg-slate-100 px-1">apps/web</code>.
+          Optional: <code className="rounded bg-slate-100 px-1">VITE_SUPABASE_*</code> for
+          local dev only. Production loads config from{" "}
+          <code className="rounded bg-slate-100 px-1">/api/config</code> at runtime.
         </p>
       </div>
     </div>
