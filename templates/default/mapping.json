@@ -1,0 +1,25 @@
+{
+  "templateId": "default",
+  "description": "ATEEQ Overleaf CV — article class, fontawesome5, resumeSubheading blocks",
+  "schemaVersion": 1,
+  "sections": [
+    { "id": "header", "jsonPath": "personal" },
+    { "id": "summary", "jsonPath": "summary" },
+    { "id": "skills", "jsonPath": "skillGroups" },
+    { "id": "experience", "jsonPath": "experience" },
+    { "id": "projects", "jsonPath": "projects" },
+    { "id": "education", "jsonPath": "education" },
+    { "id": "certifications", "jsonPath": "certificates" }
+  ],
+  "optional": {
+    "invisibleAtsBlock": {
+      "jsonPath": "atsKeywords",
+      "defaultEnabled": false,
+      "latexMacro": "\\color{white}\\footnotesize"
+    }
+  },
+  "coverLetter": {
+    "jsonPath": "coverLetterParagraph",
+    "notInPdf": true
+  }
+}

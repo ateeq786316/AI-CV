@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "personal": {
+    "fullName": "ATEEQ UR REHMAN",
+    "title": "Backend Software Engineer (Node.js / NestJS)",
+    "phone": "+92-312-5053926",
+    "email": "ateeq786316@gmail.com",
+    "github": "github.com/ateeq786316",
+    "linkedin": "linkedin.com/in/ateeq-u-63b054263"
+  },
+  "summary": "Backend Software Engineer specializing in Node.js and NestJS with experience building RESTful APIs, authentication systems, role-based access control, real-time features, and database-driven applications. Strong background in PostgreSQL, Prisma, MongoDB, and WebSockets with a focus on scalable backend architecture.",
+  "skillGroups": [
+    {
+      "label": "Backend",
+      "items": [
+        "Node.js",
+        "NestJS",
+        "Express.js",
+        "REST APIs",
+        "WebSockets",
+        "JWT",
+        "RBAC"
+      ]
+    },
+    {
+      "label": "Databases",
+      "items": [
+        "PostgreSQL",
+        "MongoDB",
+        "Prisma ORM",
+        "Mongoose",
+        "SQL"
+      ]
+    },
+    {
+      "label": "Languages",
+      "items": ["TypeScript", "JavaScript", "C++"]
+    },
+    {
+      "label": "Tools",
+      "items": ["Git", "Postman", "VS Code"]
+    }
+  ],
+  "experience": [
+    {
+      "company": "GeekyBugs",
+      "role": "Backend Intern – Node.js / NestJS",
+      "location": "Lahore, Pakistan",
+      "startDate": "Sep 2025",
+      "endDate": "Present",
+      "stack": "NestJS, Prisma",
+      "bullets": [
+        "Developed and maintained RESTful APIs using NestJS.",
+        "Designed PostgreSQL schemas and implemented data access with Prisma ORM.",
+        "Implemented JWT authentication and role-based access control.",
+        "Added request validation, centralized error handling, and API security practices.",
+        "Contributed to real-time features using WebSockets."
+      ]
+    },
+    {
+      "company": "ProgrammersTech",
+      "role": "Web Development Intern",
+      "dateLabel": "3 Months",
+      "stack": "React, Node.js",
+      "bullets": [
+        "Built responsive interfaces using React.js and Tailwind CSS.",
+        "Integrated REST APIs and optimized backend logic with Node.js and Express.",
+        "Worked on authentication flows and real-time features using Supabase."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Namkeen Factory – E-Commerce Backend",
+      "startDate": "Sep 2025",
+      "endDate": "Dec 2025",
+      "stack": "NestJS, Prisma, PostgreSQL",
+      "bullets": [
+        "Designed modular backend architecture with controllers, services, and guards.",
+        "Implemented JWT authentication with Admin, Customer, and Guest roles.",
+        "Built order management, inventory tracking, and secure image uploads.",
+        "Used Prisma for type-safe queries and schema migrations."
+      ]
+    },
+    {
+      "name": "Questify – FYP Management Portal",
+      "startDate": "Aug 2024",
+      "endDate": "Feb 2025",
+      "stack": "Node.js, Express.js, MongoDB",
+      "bullets": [
+        "Developed REST APIs for proposal submission, evaluation, and progress tracking.",
+        "Implemented role-based access for students, faculty, and administrators.",
+        "Designed MongoDB schemas to support academic workflows."
+      ]
+    },
+    {
+      "name": "PlayOra – Sports Booking & Team Coordination Backend",
+      "startDate": "2024",
+      "endDate": "",
+      "stack": "Node.js, WebSockets",
+      "bullets": [
+        "Built backend services for sports ground booking and team coordination.",
+        "Implemented real-time chat and notifications using WebSockets.",
+        "Designed role-based logic for players, organizers, and ground owners."
+      ]
+    },
+    {
+      "name": "AI Code Review Assistant",
+      "startDate": "Nov 2024",
+      "endDate": "Dec 2024",
+      "stack": "Node.js, Express.js, Gemini API",
+      "bullets": [
+        "Built backend services to process code submissions and interact with AI APIs.",
+        "Designed structured API responses and validation for automated code reviews."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "degree": "B.Sc. Computer Science",
+      "institution": "Lahore Garrison University",
+      "startDate": "2021",
+      "endDate": "2025",
+      "details": ["CGPA: 3.3 / 4.0"]
+    }
+  ],
+  "certificates": [
+    {
+      "name": "Full Stack Development with React & Node.js",
+      "issuer": "Lahore Garrison University",
+      "date": "2024"
+    },
+    {
+      "name": "Frontend Fundamentals: HTML5 & CSS3",
+      "issuer": "Pirple.com",
+      "date": "2024"
+    },
+    {
+      "name": "Responsive Web Design",
+      "issuer": "freeCodeCamp",
+      "date": "2024"
+    }
+  ],
+  "_meta": {
+    "source": "latex-import",
+    "extractedAt": "2026-06-01"
+  }
+}

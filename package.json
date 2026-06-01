@@ -1,0 +1,20 @@
+{
+  "name": "ai-cv-enchancer",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w @ai-cv/web",
+    "dev:api": "npm run dev:vercel -w @ai-cv/web",
+    "build": "npm run build --workspaces --if-present",
+    "build:web": "npm run build -w @ai-cv/web",
+    "render:sample": "tsx scripts/render-sample.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3"
+  }
+}

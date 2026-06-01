@@ -1,0 +1,34 @@
+{
+  "name": "@ai-cv/web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "dev:vercel": "vercel dev --listen 3000",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@ai-cv/ai": "*",
+    "@ai-cv/latex-engine": "*",
+    "@ai-cv/shared": "*",
+    "@ai-cv/truth-lock": "*",
+    "@supabase/supabase-js": "^2.49.8",
+    "pdfjs-dist": "^5.2.133",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.6.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.4",
+    "@types/react-dom": "^19.1.5",
+    "@vercel/node": "^5.1.16",
+    "@vitejs/plugin-react": "^4.4.1",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
+  }
+}

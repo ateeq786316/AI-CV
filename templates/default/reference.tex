@@ -1,0 +1,157 @@
+%-------------------------
+% Resume in Latex
+% Author: ATEEQ UR REHMAN
+% Reference copy — do not edit for generation; use latex-engine render output.
+%------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{fontawesome5}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+
+\addtolength{\oddsidemargin}{-0.6in}
+\addtolength{\textwidth}{1.2in}
+\addtolength{\topmargin}{-0.7in}
+\addtolength{\textheight}{1.4in}
+
+\raggedright
+\setlength{\tabcolsep}{0pt}
+
+\titleformat{\section}
+{\vspace{-6pt}\scshape\large\bfseries}
+{}{0em}{}[\titlerule\vspace{-5pt}]
+
+\pdfgentounicode=1
+
+\newcommand{\resumeItem}[1]{\item\small{#1}}
+\newcommand{\resumeSubheading}[4]{
+  \item
+  \begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
+    \textbf{#1} & \textbf{\small #2} \\
+    \textit{\small #3} & \textit{\small #4}
+  \end{tabular*}
+}
+\newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=*]}
+\newcommand{\resumeItemListEnd}{\end{itemize}}
+
+\begin{document}
+
+%---------- Header ----------
+\begin{center}
+{\Huge \scshape ATEEQ UR REHMAN} \\[4pt]
+\textbf{Backend Software Engineer (Node.js / NestJS)} \\[6pt]
+\faPhone\ +92-312-5053926 \quad
+\faEnvelope\ \href{mailto:ateeq786316@gmail.com}{ateeq786316@gmail.com} \quad
+\faGithub\ \href{https://github.com/ateeq786316}{github.com/ateeq786316} \quad
+\faLinkedin\ \href{https://www.linkedin.com/in/ateeq-u-63b054263}{linkedin.com/in/ateeq-u-63b054263}
+\end{center}
+
+%---------- Summary ----------
+\section{Summary}
+Backend Software Engineer specializing in Node.js and NestJS with experience building RESTful APIs,
+authentication systems, role-based access control, real-time features, and database-driven applications.
+Strong background in PostgreSQL, Prisma, MongoDB, and WebSockets with a focus on scalable backend architecture.
+
+%---------- Skills ----------
+\section{Technical Skills}
+\textbf{Backend:} Node.js, NestJS, Express.js, REST APIs, WebSockets, JWT, RBAC \\
+\textbf{Databases:} PostgreSQL, MongoDB, Prisma ORM, Mongoose, SQL \\
+\textbf{Languages:} TypeScript, JavaScript, C++ \\
+\textbf{Tools:} Git, Postman, VS Code
+
+%---------- Experience ----------
+\section{Experience}
+\begin{itemize}[leftmargin=*]
+
+\resumeSubheading
+{Backend Intern – Node.js / NestJS}{Sep 2025 -- Present}
+{GeekyBugs, Lahore, Pakistan}{NestJS, Prisma}
+\resumeItemListStart
+\resumeItem{Developed and maintained RESTful APIs using NestJS.}
+\resumeItem{Designed PostgreSQL schemas and implemented data access with Prisma ORM.}
+\resumeItem{Implemented JWT authentication and role-based access control.}
+\resumeItem{Added request validation, centralized error handling, and API security practices.}
+\resumeItem{Contributed to real-time features using WebSockets.}
+\resumeItemListEnd
+
+\resumeSubheading
+{Web Development Intern}{3 Months}
+{ProgrammersTech}{React, Node.js}
+\resumeItemListStart
+\resumeItem{Built responsive interfaces using React.js and Tailwind CSS.}
+\resumeItem{Integrated REST APIs and optimized backend logic with Node.js and Express.}
+\resumeItem{Worked on authentication flows and real-time features using Supabase.}
+\resumeItemListEnd
+
+\end{itemize}
+
+%---------- Projects ----------
+\section{Projects}
+\begin{itemize}[leftmargin=*]
+
+\resumeSubheading
+{Namkeen Factory – E-Commerce Backend}{Sep 2025 -- Dec 2025}
+{NestJS, Prisma, PostgreSQL}{}
+\resumeItemListStart
+\resumeItem{Designed modular backend architecture with controllers, services, and guards.}
+\resumeItem{Implemented JWT authentication with Admin, Customer, and Guest roles.}
+\resumeItem{Built order management, inventory tracking, and secure image uploads.}
+\resumeItem{Used Prisma for type-safe queries and schema migrations.}
+\resumeItemListEnd
+
+\resumeSubheading
+{Questify – FYP Management Portal}{Aug 2024 -- Feb 2025}
+{Node.js, Express.js, MongoDB}{}
+\resumeItemListStart
+\resumeItem{Developed REST APIs for proposal submission, evaluation, and progress tracking.}
+\resumeItem{Implemented role-based access for students, faculty, and administrators.}
+\resumeItem{Designed MongoDB schemas to support academic workflows.}
+\resumeItemListEnd
+
+\resumeSubheading
+{PlayOra – Sports Booking \& Team Coordination Backend}{2024}
+{Node.js, WebSockets}{}
+\resumeItemListStart
+\resumeItem{Built backend services for sports ground booking and team coordination.}
+\resumeItem{Implemented real-time chat and notifications using WebSockets.}
+\resumeItem{Designed role-based logic for players, organizers, and ground owners.}
+\resumeItemListEnd
+
+\resumeSubheading
+{AI Code Review Assistant}{Nov 2024 -- Dec 2024}
+{Node.js, Express.js, Gemini API}{}
+\resumeItemListStart
+\resumeItem{Built backend services to process code submissions and interact with AI APIs.}
+\resumeItem{Designed structured API responses and validation for automated code reviews.}
+\resumeItemListEnd
+
+\end{itemize}
+
+%---------- Education ----------
+\section{Education}
+\textbf{B.Sc. Computer Science} \\
+Lahore Garrison University \hfill 2021 -- 2025 \\
+CGPA: 3.3 / 4.0
+
+%---------- Certifications ----------
+\section{Certifications}
+\begin{itemize}[leftmargin=*]
+\item Full Stack Development with React \& Node.js – Lahore Garrison University (2024)
+\item Frontend Fundamentals: HTML5 \& CSS3 – Pirple.com (2024)
+\item Responsive Web Design – freeCodeCamp (2024)
+\end{itemize}
+
+\end{document}
