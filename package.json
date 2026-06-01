@@ -9,7 +9,8 @@
   "scripts": {
     "dev": "npm run dev -w @ai-cv/web",
     "dev:api": "npm run dev:vercel -w @ai-cv/web",
-    "build": "npm run build --workspaces --if-present",
+    "build": "npm run build:packages && npm run build -w @ai-cv/web",
+    "build:packages": "npm run build -w @ai-cv/shared && npm run build -w @ai-cv/latex-engine && npm run build -w @ai-cv/truth-lock && npm run build -w @ai-cv/ai",
     "build:web": "npm run build -w @ai-cv/web",
     "render:sample": "tsx scripts/render-sample.ts"
   },
