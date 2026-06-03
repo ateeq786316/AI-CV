@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Alert } from "../components/ui/Alert";
+import { Button } from "../components/ui/Button";
+import { Card } from "../components/ui/Card";
+import { PageHeader } from "../components/ui/PageHeader";
+import { Spinner } from "../components/ui/Spinner";
 import { apiClient } from "../lib/api";
 
 export function ProfilePage() {
@@ -7,6 +12,7 @@ export function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     apiClient
@@ -16,52 +22,69 @@ export function ProfilePage() {
           setJsonText(JSON.stringify(res.profile.data, null, 2));
         }
       })
+      .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
   }, []);
 
   const save = async () => {
     setMessage("");
+    setError("");
     setSaving(true);
     try {
       const parsed = JSON.parse(jsonText);
       await apiClient.saveProfile(parsed);
-      setMessage("Saved.");
+      setMessage("Master profile saved.");
     } catch (err) {
-      setMessage(err instanceof Error ? err.message : "Save failed");
+      setMessage("");
+      setError(err instanceof Error ? err.message : "Save failed");
     } finally {
       setSaving(false);
     }
   };
 
-  if (loading) return <p className="text-slate-500">Loading profile…</p>;
+  if (loading) return <Spinner label="Loading profile…" />;
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Master profile</h1>
-        <Link to="/onboarding" className="text-sm text-brand-600 hover:underline">
-          Re-import CV
+    <div className="space-y-8">
+      <PageHeader
+        eyebrow="Master data"
+        title="Your profile"
+        description="Everything here is the source of truth. AI can only reorder and rephrase these facts."
+        action={
+          <Link to="/onboarding">
+            <Button variant="secondary">Re-import CV</Button>
+          </Link>
+        }
+      />
+
+      {error && <Alert tone="error">{error}</Alert>}
+      {message && <Alert tone="success">{message}</Alert>}
+
+      <Alert tone="info" title="Advanced editing">
+        JSON view for power users. Invalid JSON will block save. Most users never need
+        to edit this manually.
+      </Alert>
+
+      <Card padding="none">
+        <textarea
+          value={jsonText}
+          onChange={(e) => setJsonText(e.target.value)}
+          rows={22}
+          spellCheck={false}
+          className="w-full rounded-2xl border-0 bg-ink/95 p-5 font-mono text-xs leading-relaxed text-emerald-100/90 focus:outline-none focus:ring-2 focus:ring-accent/30"
+        />
+      </Card>
+
+      <div className="flex flex-wrap gap-3">
+        <Button size="lg" loading={saving} onClick={save}>
+          Save changes
+        </Button>
+        <Link to="/generate">
+          <Button variant="secondary" size="lg">
+            Tailor for a job →
+          </Button>
         </Link>
       </div>
-      <p className="text-sm text-slate-600">
-        Source of truth for AI. Only facts here can appear in tailored CVs.
-      </p>
-      <textarea
-        value={jsonText}
-        onChange={(e) => setJsonText(e.target.value)}
-        rows={24}
-        className="w-full rounded-xl border border-slate-300 p-3 font-mono text-xs"
-        spellCheck={false}
-      />
-      {message && <p className="text-sm text-slate-600">{message}</p>}
-      <button
-        type="button"
-        onClick={save}
-        disabled={saving}
-        className="rounded-lg bg-brand-600 px-5 py-2.5 font-medium text-white hover:bg-brand-700 disabled:opacity-50"
-      >
-        {saving ? "Saving…" : "Save changes"}
-      </button>
     </div>
   );
 }

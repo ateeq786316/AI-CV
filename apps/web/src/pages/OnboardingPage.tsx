@@ -1,8 +1,20 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Alert } from "../components/ui/Alert";
+import { Button } from "../components/ui/Button";
+import { Card } from "../components/ui/Card";
+import { FileDropzone } from "../components/ui/FileDropzone";
+import { PageHeader } from "../components/ui/PageHeader";
+import { StepProgress } from "../components/ui/StepProgress";
 import { useAuth } from "../contexts/AuthContext";
 import { apiClient } from "../lib/api";
 import { extractTextFromPdf } from "../lib/pdf";
+
+const STEPS = [
+  { label: "Upload", description: "PDF or paste" },
+  { label: "Extract", description: "AI reads facts" },
+  { label: "Review", description: "Edit profile" },
+];
 
 export function OnboardingPage() {
   const navigate = useNavigate();
@@ -11,8 +23,13 @@ export function OnboardingPage() {
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const step = loading ? 1 : 0;
 
   const runExtract = async (raw: string, source: "paste" | "pdf") => {
+    if (!raw.trim()) {
+      setError("Add some CV content first.");
+      return;
+    }
     setError("");
     setLoading(true);
     try {
@@ -25,45 +42,48 @@ export function OnboardingPage() {
     }
   };
 
-  const onPasteSubmit = () => runExtract(text, "paste");
-
   const onFile = async (file: File) => {
+    setError("");
+    setLoading(true);
     try {
       const extracted = await extractTextFromPdf(file);
       setText(extracted);
       await runExtract(extracted, "pdf");
     } catch (err) {
       setError(err instanceof Error ? err.message : "PDF read failed");
+      setLoading(false);
     }
   };
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
-      <h1 className="text-2xl font-bold">Add your CV</h1>
-      {!user && (
-        <p className="rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-900">
-          You must be{" "}
-          <Link to="/login" className="font-medium underline">
-            signed in
-          </Link>{" "}
-          before uploading.
-        </p>
-      )}
-      <p className="text-slate-600">
-        Paste text or upload a PDF. We extract structured data once — you won&apos;t
-        need to upload again for each job.
-      </p>
+    <div className="space-y-8">
+      <PageHeader
+        eyebrow="Step 1 of 3"
+        title="Build your master profile"
+        description="This is your source of truth. We only reuse facts from here — never invented employers or skills."
+      />
 
-      <div className="flex gap-2">
+      {!user && (
+        <Alert tone="warning" title="Sign in required">
+          <Link to="/login" className="font-semibold underline">
+            Sign in
+          </Link>{" "}
+          before uploading your CV.
+        </Alert>
+      )}
+
+      <StepProgress steps={STEPS} current={step} />
+
+      <div className="flex gap-2 rounded-2xl bg-surface-sunken/60 p-1">
         {(["paste", "pdf"] as const).map((t) => (
           <button
             key={t}
             type="button"
             onClick={() => setTab(t)}
-            className={`rounded-lg px-4 py-2 text-sm font-medium ${
+            className={`flex-1 rounded-xl py-2.5 text-sm font-semibold transition-all ${
               tab === t
-                ? "bg-brand-600 text-white"
-                : "bg-white text-slate-600 ring-1 ring-slate-200"
+                ? "bg-surface-raised text-ink shadow-sm"
+                : "text-ink-muted hover:text-ink"
             }`}
           >
             {t === "paste" ? "Paste text" : "Upload PDF"}
@@ -71,43 +91,39 @@ export function OnboardingPage() {
         ))}
       </div>
 
-      {error && (
-        <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
-      )}
+      {error && <Alert tone="error">{error}</Alert>}
 
       {tab === "paste" ? (
-        <div className="space-y-3">
-          <textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            rows={16}
-            placeholder="Paste your full CV text here…"
-            className="w-full rounded-xl border border-slate-300 p-3 font-mono text-sm"
-          />
-          <button
-            type="button"
-            disabled={loading || !text.trim()}
-            onClick={onPasteSubmit}
-            className="rounded-lg bg-brand-600 px-5 py-2.5 font-medium text-white hover:bg-brand-700 disabled:opacity-50"
+        <Card>
+          <label className="label-text">
+            CV content
+            <textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              rows={14}
+              disabled={loading}
+              placeholder="Paste your full CV: experience, skills, education, projects…"
+              className="input-field font-mono text-xs leading-relaxed"
+            />
+          </label>
+          <Button
+            className="mt-4 w-full sm:w-auto"
+            size="lg"
+            loading={loading}
+            disabled={!text.trim() || !user}
+            onClick={() => runExtract(text, "paste")}
           >
-            {loading ? "Extracting with AI…" : "Extract & save"}
-          </button>
-        </div>
+            Extract & continue
+          </Button>
+        </Card>
       ) : (
-        <div className="rounded-xl border-2 border-dashed border-slate-300 bg-white p-8 text-center">
-          <input
-            type="file"
-            accept="application/pdf"
-            disabled={loading}
-            onChange={(e) => {
-              const f = e.target.files?.[0];
-              if (f) onFile(f);
-            }}
-            className="text-sm"
-          />
-          <p className="mt-2 text-xs text-slate-500">PDF only for MVP</p>
-        </div>
+        <FileDropzone onFile={onFile} disabled={!user} loading={loading} />
       )}
+
+      <Alert tone="info" title="What happens next?">
+        AI structures your CV into JSON. You can review and edit on the next screen before
+        tailoring for jobs.
+      </Alert>
     </div>
   );
 }

@@ -1,4 +1,8 @@
 import { FormEvent, useEffect, useState } from "react";
+import { Alert } from "../components/ui/Alert";
+import { Button } from "../components/ui/Button";
+import { Card } from "../components/ui/Card";
+import { PageHeader } from "../components/ui/PageHeader";
 import { apiClient } from "../lib/api";
 
 export function SettingsPage() {
@@ -26,7 +30,7 @@ export function SettingsPage() {
     try {
       await apiClient.saveApiKey(apiKey);
       setApiKey("");
-      setMessage("Gemini API key saved (encrypted).");
+      setMessage("API key saved securely.");
       refresh();
     } catch (err) {
       setMessage(err instanceof Error ? err.message : "Failed");
@@ -37,62 +41,71 @@ export function SettingsPage() {
 
   const remove = async () => {
     await apiClient.deleteApiKey();
-    setMessage("Removed your API key. Platform key will be used if configured.");
+    setMessage("Removed. Platform key will be used when available.");
     refresh();
   };
 
   return (
-    <div className="mx-auto max-w-lg space-y-6">
-      <h1 className="text-2xl font-bold">Settings</h1>
+    <div className="space-y-8">
+      <PageHeader
+        eyebrow="Account"
+        title="Settings"
+        description="Optional: bring your own Gemini API key if shared quota runs out."
+      />
 
-      <section className="rounded-xl bg-white p-6 ring-1 ring-slate-200">
-        <h2 className="font-semibold">Your Gemini API key (BYOK)</h2>
-        <p className="mt-2 text-sm text-slate-600">
-          If platform quota runs out, add your own free Gemini key from{" "}
+      <Card>
+        <h2 className="font-display text-lg font-semibold text-ink">Gemini API key</h2>
+        <p className="prose-muted mt-2">
+          Get a free key from{" "}
           <a
             href="https://aistudio.google.com/apikey"
             target="_blank"
             rel="noreferrer"
-            className="text-brand-600 underline"
+            className="font-semibold text-accent hover:underline"
           >
             Google AI Studio
           </a>
-          . Stored encrypted in Supabase.
+          . Encrypted at rest in your account.
         </p>
         {configured && (
-          <p className="mt-2 text-sm text-green-700">
-            Key configured (ends with …{hint})
+          <p className="mt-3 text-sm font-medium text-emerald-700">
+            Active key ending in …{hint}
           </p>
         )}
-        <form onSubmit={save} className="mt-4 space-y-3">
+        <form onSubmit={save} className="mt-6 space-y-4">
           <input
             type="password"
             value={apiKey}
             onChange={(e) => setApiKey(e.target.value)}
-            placeholder="AIza…"
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+            placeholder="Paste API key"
+            className="input-field"
+            autoComplete="off"
           />
-          <div className="flex gap-2">
-            <button
-              type="submit"
-              disabled={loading || !apiKey}
-              className="rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700 disabled:opacity-50"
-            >
+          <div className="flex flex-wrap gap-2">
+            <Button type="submit" loading={loading} disabled={!apiKey}>
               Save key
-            </button>
+            </Button>
             {configured && (
-              <button
-                type="button"
-                onClick={remove}
-                className="rounded-lg border border-slate-300 px-4 py-2 text-sm hover:bg-slate-50"
-              >
+              <Button type="button" variant="secondary" onClick={remove}>
                 Remove
-              </button>
+              </Button>
             )}
           </div>
         </form>
-        {message && <p className="mt-3 text-sm text-slate-600">{message}</p>}
-      </section>
+        {message && (
+          <p className="mt-4 text-sm text-ink-muted">{message}</p>
+        )}
+      </Card>
+
+      <Card>
+        <h2 className="font-display text-lg font-semibold text-ink">Checklist</h2>
+        <ul className="mt-4 space-y-2 text-sm text-ink-muted">
+          <li>✓ Confirm email is OFF in Supabase for easy signup</li>
+          <li>✓ Vercel env: Preview + Production both enabled</li>
+          <li>✓ GEMINI_MODEL = gemini-2.5-flash</li>
+          <li>✓ PDF fails? Download .tex → Overleaf</li>
+        </ul>
+      </Card>
     </div>
   );
 }

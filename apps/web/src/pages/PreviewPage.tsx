@@ -1,11 +1,21 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { Alert } from "../components/ui/Alert";
+import { Button } from "../components/ui/Button";
+import { Card } from "../components/ui/Card";
+import { PageHeader } from "../components/ui/PageHeader";
+import { Spinner } from "../components/ui/Spinner";
+import { StepProgress } from "../components/ui/StepProgress";
 import { apiClient } from "../lib/api";
+
+const STEPS = [{ label: "Master CV" }, { label: "Job" }, { label: "Preview & export" }];
 
 export function PreviewPage() {
   const { id } = useParams<{ id: string }>();
+  const [tab, setTab] = useState<"letter" | "cv" | "pdf">("letter");
   const [optimized, setOptimized] = useState<unknown>(null);
   const [coverLetter, setCoverLetter] = useState("");
+  const [loading, setLoading] = useState(true);
   const [compiling, setCompiling] = useState(false);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [tex, setTex] = useState<string | null>(null);
@@ -19,7 +29,8 @@ export function PreviewPage() {
         setOptimized(res.generation.optimized_data);
         setCoverLetter(res.generation.cover_letter ?? "");
       })
-      .catch((e) => setError(e.message));
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false));
   }, [id]);
 
   const approveAndDownload = async () => {
@@ -31,16 +42,17 @@ export function PreviewPage() {
       setTex(res.tex);
       if (res.pdfBase64) {
         const blob = Uint8Array.from(atob(res.pdfBase64), (c) => c.charCodeAt(0));
-        const url = URL.createObjectURL(
-          new Blob([blob], { type: "application/pdf" }),
-        );
+        const url = URL.createObjectURL(new Blob([blob], { type: "application/pdf" }));
         setPdfUrl(url);
+        setTab("pdf");
         const a = document.createElement("a");
         a.href = url;
         a.download = `cv-${id.slice(0, 8)}.pdf`;
         a.click();
       } else if (res.pdfError) {
-        setError(`PDF: ${res.pdfError}. Download .tex below.`);
+        setError(
+          `PDF compile unavailable: ${res.pdfError} Use Download .tex and compile in Overleaf.`,
+        );
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Compile failed");
@@ -59,65 +71,94 @@ export function PreviewPage() {
     a.click();
   };
 
+  if (loading) return <Spinner label="Loading preview…" />;
+
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Preview</h1>
-        <Link to="/" className="text-sm text-brand-600 hover:underline">
-          ← Dashboard
-        </Link>
-      </div>
+    <div className="space-y-8">
+      <PageHeader
+        eyebrow="Step 3 of 3"
+        title="Review & export"
+        description="Read the cover letter and tailored content. When satisfied, download your PDF."
+        action={
+          <Link to="/dashboard">
+            <Button variant="secondary">Dashboard</Button>
+          </Link>
+        }
+      />
 
-      {error && (
-        <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
-      )}
+      <StepProgress steps={STEPS} current={2} />
 
-      <section className="rounded-xl bg-white p-5 ring-1 ring-slate-200">
-        <h2 className="mb-2 font-semibold">Cover letter (1 paragraph)</h2>
-        <p className="whitespace-pre-wrap text-sm leading-relaxed text-slate-700">
-          {coverLetter || "—"}
-        </p>
-      </section>
+      {error && <Alert tone="error">{error}</Alert>}
 
-      <section className="rounded-xl bg-white p-5 ring-1 ring-slate-200">
-        <h2 className="mb-2 font-semibold">Optimized CV (JSON)</h2>
-        <pre className="max-h-96 overflow-auto rounded-lg bg-slate-900 p-4 text-xs text-slate-100">
-          {optimized ? JSON.stringify(optimized, null, 2) : "Loading…"}
-        </pre>
-      </section>
-
-      {pdfUrl && (
-        <section className="rounded-xl bg-white p-5 ring-1 ring-slate-200">
-          <h2 className="mb-2 font-semibold">PDF preview</h2>
-          <iframe title="CV PDF" src={pdfUrl} className="h-[600px] w-full rounded-lg border" />
-        </section>
-      )}
-
-      <div className="flex flex-wrap gap-3">
-        <button
-          type="button"
-          onClick={approveAndDownload}
-          disabled={compiling}
-          className="rounded-lg bg-brand-600 px-5 py-2.5 font-medium text-white hover:bg-brand-700 disabled:opacity-50"
-        >
-          {compiling ? "Compiling PDF…" : "Approve & download PDF"}
-        </button>
-        {tex && (
+      <div className="flex gap-1 rounded-2xl bg-surface-sunken/60 p-1">
+        {(
+          [
+            ["letter", "Cover letter"],
+            ["cv", "CV data"],
+            ["pdf", "PDF"],
+          ] as const
+        ).map(([key, label]) => (
           <button
+            key={key}
             type="button"
-            onClick={downloadTex}
-            className="rounded-lg border border-slate-300 px-5 py-2.5 font-medium hover:bg-slate-50"
+            onClick={() => setTab(key)}
+            className={`flex-1 rounded-xl py-2 text-sm font-semibold ${
+              tab === key ? "bg-surface-raised shadow-sm text-ink" : "text-ink-muted"
+            }`}
           >
-            Download .tex
+            {label}
           </button>
-        )}
-        <Link
-          to="/generate"
-          className="rounded-lg border border-slate-300 px-5 py-2.5 font-medium hover:bg-slate-50"
-        >
-          Regenerate
-        </Link>
+        ))}
       </div>
+
+      {tab === "letter" && (
+        <Card>
+          <p className="whitespace-pre-wrap text-sm leading-relaxed text-ink">
+            {coverLetter || "No cover letter generated."}
+          </p>
+        </Card>
+      )}
+
+      {tab === "cv" && (
+        <Card padding="none">
+          <pre className="max-h-[28rem] overflow-auto rounded-2xl bg-ink p-5 text-xs leading-relaxed text-surface-sunken">
+            {optimized ? JSON.stringify(optimized, null, 2) : "—"}
+          </pre>
+        </Card>
+      )}
+
+      {tab === "pdf" && pdfUrl && (
+        <Card padding="none">
+          <iframe
+            title="CV PDF preview"
+            src={pdfUrl}
+            className="h-[32rem] w-full rounded-2xl border-0"
+          />
+        </Card>
+      )}
+
+      <Card className="border-accent/20 bg-accent-light/30">
+        <h3 className="font-semibold text-ink">Ready to export?</h3>
+        <p className="prose-muted mt-1">
+          PDF uses our LaTeX template. If compile fails, download `.tex` and open in
+          Overleaf — same result, guaranteed fonts.
+        </p>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <Button size="lg" loading={compiling} onClick={approveAndDownload}>
+            Download PDF
+          </Button>
+          {tex && (
+            <Button variant="secondary" size="lg" onClick={downloadTex}>
+              Download .tex
+            </Button>
+          )}
+          <Link to="/generate">
+            <Button variant="ghost" size="lg">
+              Try another job
+            </Button>
+          </Link>
+        </div>
+      </Card>
     </div>
   );
 }
