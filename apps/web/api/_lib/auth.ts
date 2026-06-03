@@ -1,24 +1,31 @@
 import type { VercelRequest } from "@vercel/node";
-import { getServiceClient } from "./supabase.js";
+import type { SupabaseClient, User } from "@supabase/supabase-js";
+import { createUserClient } from "./supabase.js";
 
-export async function requireUser(req: VercelRequest) {
+export async function requireUser(req: VercelRequest): Promise<{
+  user: User;
+  token: string;
+  supabase: SupabaseClient;
+}> {
   const auth = req.headers.authorization;
   if (!auth?.startsWith("Bearer ")) {
-    throw new AuthError("Missing authorization token", 401);
+    throw new AuthError("Missing authorization token. Sign in again.", 401);
   }
-  const token = auth.slice(7);
-  const supabase = getServiceClient();
+  const token = auth.slice(7).trim();
+  if (!token) {
+    throw new AuthError("Missing authorization token. Sign in again.", 401);
+  }
+
+  const supabase = createUserClient(token);
   const { data, error } = await supabase.auth.getUser(token);
+
   if (error || !data.user) {
-    const hint =
-      error?.message?.includes("JWT") || error?.status === 403
-        ? " Server Supabase keys may not match this project — check SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY on Vercel (Preview + Production)."
-        : "";
     throw new AuthError(
-      `Invalid or expired session.${hint} Sign in again.`,
+      `Invalid or expired session. Sign out, sign in again, and retry. (${error?.message ?? "no user"})`,
       401,
     );
   }
+
   return { user: data.user, token, supabase };
 }
 
