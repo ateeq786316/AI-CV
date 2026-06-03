@@ -39,7 +39,7 @@ export function HeroPreview() {
           <div className="bg-white p-5 sm:col-span-3">
             <div className="flex items-start justify-between gap-2">
               <div>
-                <p className="font-display text-lg font-semibold text-ink">Ateeq Ahmed</p>
+                <p className="font-display text-lg font-semibold text-ink">Ateeq ur Rehman</p>
                 <p className="text-xs text-ink-muted">Full-stack · React · Node</p>
               </div>
               <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold text-emerald-800">
