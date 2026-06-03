@@ -1,4 +1,4 @@
-const GLYPH_STUB = "% Minimal stub\\n\\pdfgentounicode=1\\n";
+const GLYPH_STUB = "% Minimal stub\n\\pdfgentounicode=1\n";
 
 export async function compilePdfFromTex(mainTex: string): Promise<Buffer> {
   if (process.env.LATEX_COMPILE_ENABLED === "false") {
@@ -11,28 +11,54 @@ export async function compilePdfFromTex(mainTex: string): Promise<Buffer> {
     body: JSON.stringify({
       compiler: "pdflatex",
       resources: [
-        { path: "main.tex", content: mainTex },
-        { path: "glyphtounicode.tex", content: GLYPH_STUB },
+        {
+          main: true,
+          content: mainTex,
+        },
+        {
+          path: "glyphtounicode.tex",
+          content: GLYPH_STUB,
+        },
       ],
     }),
   });
 
+  const contentType = response.headers.get("content-type") ?? "";
+
+  if (response.ok && contentType.includes("application/pdf")) {
+    return Buffer.from(await response.arrayBuffer());
+  }
+
+  const bodyText = await response.text();
+
   if (!response.ok) {
-    const errText = await response.text();
-    throw new CompileError(`LaTeX compile failed: ${errText.slice(0, 500)}`, 502);
+    let message = bodyText.slice(0, 800);
+    try {
+      const errJson = JSON.parse(bodyText) as { log?: string; message?: string };
+      message = errJson.log ?? errJson.message ?? message;
+    } catch {
+      /* plain text error */
+    }
+    throw new CompileError(`LaTeX compile failed: ${message}`, 502);
   }
 
-  const data = (await response.json()) as {
-    pdf?: string;
-    status?: string;
-    log?: string;
-  };
-
-  if (data.pdf) {
-    return Buffer.from(data.pdf, "base64");
+  try {
+    const data = JSON.parse(bodyText) as { pdf?: string };
+    if (data.pdf) {
+      return Buffer.from(data.pdf, "base64");
+    }
+  } catch {
+    /* not json */
   }
 
-  throw new CompileError(data.log ?? "No PDF returned from compile service", 502);
+  if (bodyText.startsWith("%PDF")) {
+    return Buffer.from(bodyText, "binary");
+  }
+
+  throw new CompileError(
+    bodyText.slice(0, 500) || "No PDF returned from compile service",
+    502,
+  );
 }
 
 export class CompileError extends Error {
