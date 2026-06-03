@@ -100,8 +100,6 @@ export function SettingsPage() {
       <Card>
         <h2 className="font-display text-lg font-semibold text-ink">Checklist</h2>
         <ul className="mt-4 space-y-2 text-sm text-ink-muted">
-          <li>✓ Confirm email is OFF in Supabase for easy signup</li>
-          <li>✓ Vercel env: Preview + Production both enabled</li>
           <li>✓ GEMINI_MODEL = gemini-2.5-flash</li>
           <li>✓ PDF fails? Download .tex → Overleaf</li>
         </ul>
