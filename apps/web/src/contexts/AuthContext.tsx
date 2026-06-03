@@ -49,6 +49,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       },
     });
     if (error) {
+      if (error.message.includes("confirmation email")) {
+        throw new Error(
+          "Supabase could not send a confirmation email. In Supabase Dashboard → Authentication → Providers → Email, turn OFF “Confirm email”, then try again.",
+        );
+      }
       throw new Error(error.message);
     }
     if (data.user && !data.session) {

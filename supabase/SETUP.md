@@ -8,12 +8,19 @@ In [Supabase Dashboard](https://supabase.com/dashboard/project/ogxuuoxicvszwpatx
 2. `migrations/002_storage.sql`  
    - If bucket insert fails: **Storage** → create buckets `generated-pdfs` and `cv-uploads` (private), then re-run only the `create policy` statements from 002.
 3. `migrations/003_auth_trigger.sql`
+4. `migrations/004_fix_signup_profiles.sql` ← run if signup returns **500**
 
 ## 2. Auth
 
 **Authentication** → **Providers** → enable **Email**.
 
-Optional: disable “Confirm email” for faster local testing.
+**If signup shows 500:** run `004_fix_signup_profiles.sql`, then check **Logs → Postgres** in Supabase.
+
+**If signup shows 400:** user may already exist, or password too weak.
+
+For faster testing (recommended): **Authentication** → **Providers** → **Email** → turn **OFF** “Confirm email”.
+
+If you see `Error sending confirmation email`, email confirmation is ON but Supabase has no SMTP — disable confirm email or configure SMTP under **Project Settings → Authentication → SMTP**.
 
 ## 3. Environment
 
