@@ -36,8 +36,7 @@ async function api<T>(
   if (!res.ok) {
     if (res.status === 401) {
       throw new Error(
-        body.error ??
-          "Session invalid. Sign out, sign in again, or check Vercel env vars (SUPABASE_SERVICE_ROLE_KEY) match your Supabase project.",
+        body.error ?? "Session expired. Please sign out and sign in again.",
       );
     }
     throw new Error(body.error ?? `Request failed (${res.status})`);

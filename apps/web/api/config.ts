@@ -20,16 +20,29 @@ export default function handler(_req: VercelRequest, res: VercelResponse) {
 
   if (missing.length > 0) {
     return json(res, 500, {
-      error: `Missing ${missing.join(" and ")} on Vercel. Use your Supabase anon public key for SUPABASE_ANON_KEY.`,
-      missing,
+      error: "Server configuration incomplete.",
+      ...(process.env.NODE_ENV !== "production" && { missing }),
     });
   }
 
   if (!supabaseAnonKey.startsWith("eyJ")) {
     return json(res, 500, {
-      error:
-        "SUPABASE_ANON_KEY looks wrong. Use the anon public JWT from Supabase → Settings → API (starts with eyJ…), not the service_role key.",
+      error: "Server misconfiguration. Contact the site administrator.",
     });
+  }
+
+  // Reject service_role JWT (role claim must be anon, not service_role)
+  try {
+    const payload = JSON.parse(
+      Buffer.from(supabaseAnonKey.split(".")[1]!, "base64url").toString("utf8"),
+    ) as { role?: string };
+    if (payload.role === "service_role") {
+      return json(res, 500, {
+        error: "Server misconfiguration. Contact the site administrator.",
+      });
+    }
+  } catch {
+    return json(res, 500, { error: "Server misconfiguration." });
   }
 
   return json(res, 200, { supabaseUrl, supabaseAnonKey });

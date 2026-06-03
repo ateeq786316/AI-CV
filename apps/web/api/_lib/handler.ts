@@ -12,7 +12,13 @@ export function handleError(res: VercelResponse, err: unknown) {
   console.error(err);
   const message = err instanceof Error ? err.message : "Internal server error";
   const status = message.includes("validation failed") ? 400 : 500;
-  return json(res, status, { error: message });
+  const safeMessage =
+    status === 400
+      ? message
+      : process.env.NODE_ENV === "production"
+        ? "Something went wrong. Try again or contact support."
+        : message;
+  return json(res, status, { error: safeMessage });
 }
 
 export function methodNotAllowed(res: VercelResponse, allowed: string[]) {
