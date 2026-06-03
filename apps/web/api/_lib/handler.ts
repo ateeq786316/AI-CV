@@ -11,7 +11,8 @@ export function handleError(res: VercelResponse, err: unknown) {
   if (err instanceof CompileError) return json(res, err.status, { error: err.message });
   console.error(err);
   const message = err instanceof Error ? err.message : "Internal server error";
-  return json(res, 500, { error: message });
+  const status = message.includes("validation failed") ? 400 : 500;
+  return json(res, status, { error: message });
 }
 
 export function methodNotAllowed(res: VercelResponse, allowed: string[]) {

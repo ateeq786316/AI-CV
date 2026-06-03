@@ -1,3 +1,4 @@
+export { normalizeMasterResumeRaw } from "./normalize.js";
 export {
   SCHEMA_VERSION,
   MasterResumeSchema,
