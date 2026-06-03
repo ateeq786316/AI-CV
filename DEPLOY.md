@@ -84,7 +84,7 @@ Add **all** of these for **Production**, **Preview**, and **Development**:
 | `SUPABASE_SERVICE_ROLE_KEY` | service_role key | **Secret** — never expose |
 | `GEMINI_API_KEY` | `AIza...` | Platform AI quota |
 | `ENCRYPTION_SECRET` | random 32+ chars | BYOK encryption |
-| `GEMINI_MODEL` | `gemini-2.0-flash` | optional |
+| `GEMINI_MODEL` | `gemini-2.5-flash` | optional — do **not** use `gemini-1.5-pro` (removed) |
 | `DAILY_LIMIT_PLATFORM` | `20` | optional |
 | `DAILY_LIMIT_BYOK` | `100` | optional |
 | `LATEX_COMPILE_ENABLED` | `true` | optional |
