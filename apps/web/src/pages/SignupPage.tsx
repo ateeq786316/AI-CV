@@ -54,7 +54,7 @@ export function SignupPage() {
           <input
             type="password"
             required
-            minLength={6}
+            minLength={8}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2"
@@ -68,6 +68,11 @@ export function SignupPage() {
           {loading ? "Creating…" : "Sign up"}
         </button>
       </form>
+      <p className="mt-3 text-center text-xs text-slate-500">
+        Password must be at least 8 characters. If signup fails with a database
+        error, run <code className="rounded bg-slate-100 px-1">004_fix_signup_profiles.sql</code>{" "}
+        in Supabase SQL Editor.
+      </p>
       <p className="mt-4 text-center text-sm text-slate-600">
         Already have an account?{" "}
         <Link to="/login" className="font-medium text-brand-600">

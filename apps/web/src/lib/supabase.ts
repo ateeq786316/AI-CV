@@ -8,7 +8,21 @@ export interface PublicSupabaseConfig {
 let client: SupabaseClient | null = null;
 
 export function initSupabase(config: PublicSupabaseConfig): SupabaseClient {
-  client = createClient(config.supabaseUrl, config.supabaseAnonKey);
+  const url = config.supabaseUrl?.trim();
+  const key = config.supabaseAnonKey?.trim();
+
+  if (!url || !key || !key.startsWith("eyJ")) {
+    throw new Error(
+      "Supabase anon key missing or invalid. Set SUPABASE_ANON_KEY on Vercel.",
+    );
+  }
+
+  client = createClient(url, key, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+    },
+  });
   return client;
 }
 

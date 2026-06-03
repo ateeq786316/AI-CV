@@ -5,6 +5,7 @@ export const env = {
 
 export function isSupabaseConfigured(): boolean {
   return Boolean(
-    env.supabaseUrl?.startsWith("https://") && env.supabaseAnonKey?.length,
+    env.supabaseUrl?.startsWith("https://") &&
+      env.supabaseAnonKey?.startsWith("eyJ"),
   );
 }
