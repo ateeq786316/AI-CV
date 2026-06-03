@@ -71,6 +71,8 @@ Click **Deploy** once (it may fail without env vars — that is OK).
 
 Add **all** of these for **Production**, **Preview**, and **Development**:
 
+> **Preview URLs** (`*-git-main-*.vercel.app`) need the same env vars under **Preview** — not only Production. Missing `SUPABASE_SERVICE_ROLE_KEY` on Preview causes `401 Invalid or expired session` on `/api/extract`.
+
 > **Critical:** `VITE_*` variables are baked into the frontend at **build time**.  
 > If the app shows “Configuration required” or `supabaseUrl is required`, you added env vars **after** the last build — **Redeploy** with cache cleared.
 

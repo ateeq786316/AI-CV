@@ -10,7 +10,14 @@ export async function requireUser(req: VercelRequest) {
   const supabase = getServiceClient();
   const { data, error } = await supabase.auth.getUser(token);
   if (error || !data.user) {
-    throw new AuthError("Invalid or expired session", 401);
+    const hint =
+      error?.message?.includes("JWT") || error?.status === 403
+        ? " Server Supabase keys may not match this project — check SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY on Vercel (Preview + Production)."
+        : "";
+    throw new AuthError(
+      `Invalid or expired session.${hint} Sign in again.`,
+      401,
+    );
   }
   return { user: data.user, token, supabase };
 }

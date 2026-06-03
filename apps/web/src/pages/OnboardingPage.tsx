@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 import { apiClient } from "../lib/api";
 import { extractTextFromPdf } from "../lib/pdf";
 
 export function OnboardingPage() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [tab, setTab] = useState<"paste" | "pdf">("paste");
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
@@ -38,6 +40,15 @@ export function OnboardingPage() {
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <h1 className="text-2xl font-bold">Add your CV</h1>
+      {!user && (
+        <p className="rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-900">
+          You must be{" "}
+          <Link to="/login" className="font-medium underline">
+            signed in
+          </Link>{" "}
+          before uploading.
+        </p>
+      )}
       <p className="text-slate-600">
         Paste text or upload a PDF. We extract structured data once — you won&apos;t
         need to upload again for each job.

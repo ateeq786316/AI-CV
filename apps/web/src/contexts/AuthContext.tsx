@@ -25,7 +25,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const supabase = getSupabase();
-    supabase.auth.getSession().then(({ data }) => {
+    supabase.auth.getUser().then(async ({ data: { user }, error }) => {
+      if (error || !user) {
+        setSession(null);
+        setLoading(false);
+        return;
+      }
+      const { data } = await supabase.auth.getSession();
       setSession(data.session);
       setLoading(false);
     });

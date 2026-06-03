@@ -1,10 +1,22 @@
 import { getSupabase } from "./supabase";
 
 async function getToken(): Promise<string> {
-  const { data } = await getSupabase().auth.getSession();
-  const token = data.session?.access_token;
-  if (!token) throw new Error("Not signed in");
-  return token;
+  const supabase = getSupabase();
+
+  const { data: sessionData } = await supabase.auth.getSession();
+  if (sessionData.session?.access_token) {
+    return sessionData.session.access_token;
+  }
+
+  const { data: refreshed, error } = await supabase.auth.refreshSession();
+  if (error) {
+    throw new Error("Session expired. Please sign out and sign in again.");
+  }
+  if (refreshed.session?.access_token) {
+    return refreshed.session.access_token;
+  }
+
+  throw new Error("Not signed in. Please log in and try again.");
 }
 
 async function api<T>(
@@ -22,6 +34,12 @@ async function api<T>(
   });
   const body = await res.json();
   if (!res.ok) {
+    if (res.status === 401) {
+      throw new Error(
+        body.error ??
+          "Session invalid. Sign out, sign in again, or check Vercel env vars (SUPABASE_SERVICE_ROLE_KEY) match your Supabase project.",
+      );
+    }
     throw new Error(body.error ?? `Request failed (${res.status})`);
   }
   return body as T;
