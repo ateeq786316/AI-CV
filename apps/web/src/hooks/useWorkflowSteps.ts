@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { apiClient } from "../lib/api";
 import type { WorkflowStep } from "../components/ui/WorkflowSteps";
+import { ROUTES } from "../routes";
 
 export function useWorkflowSteps() {
   const [hasProfile, setHasProfile] = useState(false);
@@ -22,7 +23,7 @@ export function useWorkflowSteps() {
       id: "profile",
       title: "Master CV",
       description: "Upload or paste your CV once. AI extracts skills, jobs, and projects.",
-      href: "/onboarding",
+      href: ROUTES.onboarding,
       done: hasProfile,
       current: !hasProfile,
     },
@@ -30,7 +31,7 @@ export function useWorkflowSteps() {
       id: "job",
       title: "Job description",
       description: "Paste the role you're applying for. We optimize without inventing facts.",
-      href: hasProfile ? "/generate" : "/onboarding",
+      href: hasProfile ? ROUTES.generate : ROUTES.onboarding,
       done: hasGeneration,
       current: hasProfile && !hasGeneration,
     },
@@ -38,7 +39,7 @@ export function useWorkflowSteps() {
       id: "preview",
       title: "Review",
       description: "Check the tailored content and cover letter before exporting.",
-      href: "/generate",
+      href: ROUTES.generate,
       done: hasGeneration,
       current: false,
     },
@@ -46,7 +47,7 @@ export function useWorkflowSteps() {
       id: "download",
       title: "Download",
       description: "Get your PDF or LaTeX file. Same professional template every time.",
-      href: "/dashboard",
+      href: ROUTES.dashboard,
       done: false,
       current: false,
     },

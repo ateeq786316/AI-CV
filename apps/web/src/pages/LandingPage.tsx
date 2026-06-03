@@ -1,7 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { HeroPreview } from "../components/landing/HeroPreview";
 import { MarketingLayout } from "../components/layout/MarketingLayout";
 import { Button } from "../components/ui/Button";
+import { Spinner } from "../components/ui/Spinner";
+import { useAuth } from "../contexts/AuthContext";
+import { ROUTES } from "../routes";
 
 const features = [
   {
@@ -86,6 +89,11 @@ function SectionLabel({ children }: { children: string }) {
 }
 
 export function LandingPage() {
+  const { user, loading } = useAuth();
+
+  if (loading) return <Spinner label="Loading…" />;
+  if (user) return <Navigate to={ROUTES.dashboard} replace />;
+
   return (
     <MarketingLayout>
       {/* Hero */}
@@ -110,7 +118,7 @@ export function LandingPage() {
               LaTeX layout — without inventing experience or fighting Word formatting.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link to="/signup">
+              <Link to={ROUTES.signup}>
                 <Button size="lg">Start free — upload your CV</Button>
               </Link>
               <a href="#how-it-works">
@@ -209,7 +217,7 @@ export function LandingPage() {
             ))}
           </div>
           <div className="mt-12 text-center">
-            <Link to="/signup">
+            <Link to={ROUTES.signup}>
               <Button
                 size="lg"
                 className="bg-white text-ink hover:bg-surface focus-visible:ring-white/40"
@@ -289,10 +297,10 @@ export function LandingPage() {
                 takes to paste a job description.
               </p>
               <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-                <Link to="/signup">
+                <Link to={ROUTES.signup}>
                   <Button size="lg">Get started free</Button>
                 </Link>
-                <Link to="/login">
+                <Link to={ROUTES.login}>
                   <Button
                     variant="secondary"
                     size="lg"

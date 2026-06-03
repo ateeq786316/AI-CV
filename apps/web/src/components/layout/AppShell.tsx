@@ -1,13 +1,14 @@
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import { ROUTES } from "../../routes";
 import { Button } from "../ui/Button";
 
 const nav = [
-  { to: "/dashboard", label: "Home", end: true },
-  { to: "/onboarding", label: "Add CV" },
-  { to: "/generate", label: "Tailor CV" },
-  { to: "/profile", label: "Master profile" },
-  { to: "/settings", label: "Settings" },
+  { to: ROUTES.dashboard, label: "Home", end: true },
+  { to: ROUTES.onboarding, label: "Add CV" },
+  { to: ROUTES.generate, label: "Tailor CV" },
+  { to: ROUTES.profile, label: "Master profile" },
+  { to: ROUTES.settings, label: "Settings" },
 ];
 
 function NavItem({ to, label, end }: { to: string; label: string; end?: boolean }) {
@@ -36,7 +37,7 @@ export function AppShell() {
     <div className="flex min-h-screen">
       <aside className="hidden w-64 shrink-0 flex-col border-r border-sidebar-border bg-sidebar lg:flex">
         <div className="border-b border-sidebar-border px-5 py-6">
-          <Link to="/dashboard" className="block">
+          <Link to={ROUTES.dashboard} className="block">
             <span className="font-display text-xl font-semibold text-white">CV Tailor</span>
             <span className="mt-1 block text-xs text-sidebar-text">
               Job-matched resumes
@@ -56,7 +57,7 @@ export function AppShell() {
             className="mt-2 w-full justify-start text-sidebar-text hover:bg-sidebar-hover hover:text-white"
             onClick={async () => {
               await signOut();
-              navigate("/login");
+              navigate(ROUTES.login);
             }}
           >
             Sign out
@@ -66,7 +67,7 @@ export function AppShell() {
 
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="flex items-center justify-between border-b border-surface-sunken/80 bg-surface-raised/80 px-4 py-3 backdrop-blur-md lg:hidden">
-          <Link to="/dashboard" className="font-display text-lg font-semibold text-ink">
+          <Link to={ROUTES.dashboard} className="font-display text-lg font-semibold text-ink">
             CV Tailor
           </Link>
           <select

@@ -13,7 +13,7 @@ interface AuthContextValue {
   session: Session | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string) => Promise<{ signedIn: boolean }>;
   signOut: () => Promise<void>;
 }
 
@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (error) throw error;
   };
 
-  const signUp = async (email: string, password: string) => {
+  const signUp = async (email: string, password: string): Promise<{ signedIn: boolean }> => {
     const { data, error } = await getSupabase().auth.signUp({
       email: email.trim(),
       password,
@@ -62,10 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
       throw new Error(error.message);
     }
-    if (data.user && !data.session) {
-      // Email confirmation required — not an error
-      return;
-    }
+    return { signedIn: Boolean(data.session) };
   };
 
   const signOut = async () => {

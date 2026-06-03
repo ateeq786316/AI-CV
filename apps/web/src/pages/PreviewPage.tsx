@@ -7,6 +7,7 @@ import { PageHeader } from "../components/ui/PageHeader";
 import { Spinner } from "../components/ui/Spinner";
 import { StepProgress } from "../components/ui/StepProgress";
 import { apiClient } from "../lib/api";
+import { ROUTES } from "../routes";
 
 const STEPS = [{ label: "Master CV" }, { label: "Job" }, { label: "Preview & export" }];
 
@@ -80,7 +81,7 @@ export function PreviewPage() {
         title="Review & export"
         description="Read the cover letter and tailored content. When satisfied, download your PDF."
         action={
-          <Link to="/dashboard">
+          <Link to={ROUTES.dashboard}>
             <Button variant="secondary">Dashboard</Button>
           </Link>
         }
@@ -152,7 +153,7 @@ export function PreviewPage() {
               Download .tex
             </Button>
           )}
-          <Link to="/generate">
+          <Link to={ROUTES.generate}>
             <Button variant="ghost" size="lg">
               Try another job
             </Button>

@@ -1,20 +1,31 @@
 import { FormEvent, useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthLayout } from "../components/layout/AuthLayout";
 import { Alert } from "../components/ui/Alert";
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
 import { useAuth } from "../contexts/AuthContext";
+import { ROUTES } from "../routes";
+
+function safeReturnPath(from: unknown): string {
+  if (typeof from !== "string" || !from.startsWith("/") || from.startsWith("//")) {
+    return ROUTES.dashboard;
+  }
+  if (from === ROUTES.home || from === ROUTES.login || from === ROUTES.signup) {
+    return ROUTES.dashboard;
+  }
+  return from;
+}
 
 export function LoginPage() {
-  const { user, signIn } = useAuth();
+  const { signIn } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const returnTo = safeReturnPath((location.state as { from?: string } | null)?.from);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
-  if (user) return <Navigate to="/dashboard" replace />;
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -22,7 +33,7 @@ export function LoginPage() {
     setLoading(true);
     try {
       await signIn(email, password);
-      navigate("/dashboard");
+      navigate(returnTo, { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Sign in failed");
     } finally {
@@ -37,7 +48,7 @@ export function LoginPage() {
       footer={
         <>
           No account?{" "}
-          <Link to="/signup" className="font-semibold text-accent hover:underline">
+          <Link to={ROUTES.signup} className="font-semibold text-accent hover:underline">
             Create one
           </Link>
         </>

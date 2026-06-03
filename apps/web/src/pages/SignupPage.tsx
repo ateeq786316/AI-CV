@@ -1,13 +1,14 @@
 import { FormEvent, useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthLayout } from "../components/layout/AuthLayout";
 import { Alert } from "../components/ui/Alert";
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
 import { useAuth } from "../contexts/AuthContext";
+import { ROUTES } from "../routes";
 
 export function SignupPage() {
-  const { user, signUp } = useAuth();
+  const { signUp } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -15,17 +16,19 @@ export function SignupPage() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  if (user) return <Navigate to="/dashboard" replace />;
-
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError("");
     setMessage("");
     setLoading(true);
     try {
-      await signUp(email, password);
-      setMessage("Account created. You can sign in now.");
-      setTimeout(() => navigate("/login"), 2000);
+      const { signedIn } = await signUp(email, password);
+      if (signedIn) {
+        navigate(ROUTES.onboarding, { replace: true });
+        return;
+      }
+      setMessage("Account created. Check your email to confirm, then sign in.");
+      setTimeout(() => navigate(ROUTES.login, { replace: true }), 2500);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Sign up failed");
     } finally {
@@ -40,7 +43,7 @@ export function SignupPage() {
       footer={
         <>
           Already registered?{" "}
-          <Link to="/login" className="font-semibold text-accent hover:underline">
+          <Link to={ROUTES.login} className="font-semibold text-accent hover:underline">
             Sign in
           </Link>
         </>

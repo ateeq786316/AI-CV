@@ -9,6 +9,7 @@ import { StepProgress } from "../components/ui/StepProgress";
 import { useAuth } from "../contexts/AuthContext";
 import { apiClient } from "../lib/api";
 import { extractTextFromPdf } from "../lib/pdf";
+import { ROUTES } from "../routes";
 
 const STEPS = [
   { label: "Upload", description: "PDF or paste" },
@@ -34,7 +35,7 @@ export function OnboardingPage() {
     setLoading(true);
     try {
       await apiClient.extract(raw, source);
-      navigate("/profile");
+      navigate(ROUTES.profile);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Extraction failed");
     } finally {

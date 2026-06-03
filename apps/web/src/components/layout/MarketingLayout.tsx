@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import { ROUTES } from "../../routes";
 import { Button } from "../ui/Button";
 
 const links = [
@@ -18,7 +19,7 @@ export function MarketingLayout({ children }: { children: ReactNode }) {
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-50 border-b border-surface-sunken/60 bg-surface-raised/85 backdrop-blur-lg">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
-          <Link to="/" className="group flex items-center gap-2.5">
+          <Link to={ROUTES.home} className="group flex items-center gap-2.5">
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent font-display text-sm font-bold text-white shadow-sm">
               CV
             </span>
@@ -43,17 +44,17 @@ export function MarketingLayout({ children }: { children: ReactNode }) {
 
           <div className="flex items-center gap-2 sm:gap-3">
             {user ? (
-              <Link to="/dashboard">
+              <Link to={ROUTES.dashboard}>
                 <Button size="md">Open dashboard</Button>
               </Link>
             ) : (
               <>
-                <Link to="/login" className="hidden sm:block">
+                <Link to={ROUTES.login} className="hidden sm:block">
                   <Button variant="ghost" size="md">
                     Sign in
                   </Button>
                 </Link>
-                <Link to="/signup">
+                <Link to={ROUTES.signup}>
                   <Button size="md">Get started free</Button>
                 </Link>
               </>
@@ -87,7 +88,7 @@ export function MarketingLayout({ children }: { children: ReactNode }) {
                   </li>
                 ))}
               <li>
-                <Link to="/signup" className="hover:text-white">
+                <Link to={ROUTES.signup} className="hover:text-white">
                   Sign up
                 </Link>
               </li>
@@ -99,13 +100,13 @@ export function MarketingLayout({ children }: { children: ReactNode }) {
             </p>
             <ul className="mt-4 space-y-2 text-sm">
               <li>
-                <Link to="/login" className="hover:text-white">
+                <Link to={ROUTES.login} className="hover:text-white">
                   Sign in
                 </Link>
               </li>
               {user && (
                 <li>
-                  <Link to="/dashboard" className="hover:text-white">
+                  <Link to={ROUTES.dashboard} className="hover:text-white">
                     Dashboard
                   </Link>
                 </li>

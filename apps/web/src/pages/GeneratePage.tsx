@@ -7,6 +7,7 @@ import { PageHeader } from "../components/ui/PageHeader";
 import { Spinner } from "../components/ui/Spinner";
 import { StepProgress } from "../components/ui/StepProgress";
 import { apiClient } from "../lib/api";
+import { ROUTES } from "../routes";
 
 const STEPS = [
   { label: "Master CV" },
@@ -63,7 +64,7 @@ export function GeneratePage() {
       if (res.validationErrors?.length) {
         setError("Some content failed validation. Check preview for details.");
       }
-      navigate(`/preview/${res.generationId}`);
+      navigate(ROUTES.preview(res.generationId));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Optimization failed");
     } finally {
